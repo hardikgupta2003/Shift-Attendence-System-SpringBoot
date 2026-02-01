@@ -43,8 +43,10 @@ public class AuthController {
                         request.getPassword()));
 
         // 2️⃣ JWT generate
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow();
         String token = jwtUtil.generateToken(
-                (org.springframework.security.core.userdetails.UserDetails) authentication.getPrincipal());
+                (org.springframework.security.core.userdetails.UserDetails) authentication.getPrincipal(),
+                user.getId());
 
         // 3️⃣ Return token
         return ResponseEntity.ok(new LoginResponse("User Logged In Successfully",token));
